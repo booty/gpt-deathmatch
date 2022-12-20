@@ -13,7 +13,7 @@
 ## Models
 
 * Models
-    * Result
+    * Submission
         * attribs
             * gpt3_prompt
             * gpt3_result
@@ -23,17 +23,22 @@
             * (remaining credit balance?)
     * User
         * attribs
-            * email
-            * name
+            * email_address
+            * first_name
+            * last_name
         * methods
             * vote_rate_limit_exceeded?
             * gpt_rate_limit_exceeded?
-    * Vote
+    * Deathmatch
         * user_id
-    * VoteResult
-        * vote_id
-        * result_id
+    * DeathmatchVote
+        * deathmatch_id
+        * submission_id
         * vote (+1 or -1)
+    * Session
+        * user_id
+        * token
+        * ip_address
 * routes
     * GET /
         * home_controller
@@ -64,83 +69,117 @@
         * redirect to GET /
 
 
-### JSON
+## JSON
 
-GET /leaderboard
+### GET /leaderboard
 
-```json
+<b>Request.</b>
+```json5
+{
+  "limit": 10, // default is 10 if not supplied
+  "skip": 0    // for paging, default is 0 if not supplied
+}
+```
+
+<b>Response.</b> Could be empty array if no votes/submissions yet.
+
+```json5
 [
   {
-    "user_id": 123,
-    "prompt": "yakity yak",
-    "response": "blah blah blah",
-    "score": 42
+    "score": 42,
+    "submission": {
+      "user_id": 123,
+      "prompt": "yakity yak",
+      "response": "blah blah blah",
+    }
   }
 ]
 ```
 
-POST /submission
+### POST /submission
 
-```json
-{
-  "session_token": "",
-  "prompt": ""
-}
-```
-
-```json
-{
-    "success": true
-}
-```
-
-POST /vote
-
-```json
+<b>Request.</b>
+```json5
 {
   "session_token": "someguid",
+  "prompt": "Write me a love story"
+}
+```
+
+<b>Response.</b> Vote will be rejected if it's a dupe, they vote on their own submission, aren't logged in, etc.
+```json5
+{
+    "success": true,
+    "error_message": ""  // might've hit rate limit, etc
+}
+```
+
+### POST /vote
+
+<b>Request.</b>
+```json5
+{
+  "session_token": "someguid",
+  "deathmatch_id": 42,
   "submission_id_winner": 123,
   "submission_id_loser": 666
 }
 ```
 
-```json
+```json5
 {
-    "success": true
+    "success": true,
+    "error_message": ""   // might've hit rate limit, etc
 }
 ```
 
-GET /deathmatch
+### GET /deathmatch
 
-```json
+<b>Request.</b>
+```json5
+{
+  "session_token": "someguid" // can be blank
+}
+```
+
+<b>Response.</b> Could be an empty array if no submissions yet, or if logged in user has already voted on everything.
+
+```json5
 [
   {
     "submission_id": 123,
     "prompt": "Tell me of your homeworld Usul",
     "response": "Beginnings are a delicate time blah blah blah"
+  },
+  {
+    "submission_id": 124,
+    "prompt": "How cool is Ruby?",
+    "response": "Super cool"
   }
 ]
 
 ```
 
-POST /session
+### POST /session
 
-```json
+<b>Request.</b>
+```json5
 {
     "email": "somebody@somewhere.com"
 }
 ```
 
-```json
+<b>Response.</b>
+```json5
 {
-    "success":  false,
-    "session_token": "someguid"
+    "success":  false,          // or true obviously
+    "session_token": "someguid" // blank if login fails
 }
 ```
 
-DELETE /session
-
-```json
+### DELETE /session
+<b>Response.</b>
+```json5
 {
     "session_token": "someguid"
 }
