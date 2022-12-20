@@ -79,7 +79,7 @@ GET /leaderboard
 ]
 ```
 
-POST /text
+POST /submission
 
 ```json
 {
