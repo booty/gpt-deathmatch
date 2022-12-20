@@ -1,0 +1,2 @@
+class Deathmatch < ApplicationRecord
+end

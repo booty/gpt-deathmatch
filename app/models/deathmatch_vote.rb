@@ -1,0 +1,2 @@
+class DeathmatchVote < ApplicationRecord
+end
