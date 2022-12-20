@@ -62,79 +62,86 @@
     * DELETE
         * log out 
         * redirect to GET /
-	
-	
+
+
 ### JSON
 
 GET /leaderboard
 
 ```json
 [
-	{
-		user_id:
-		prompt:
-		response:
-		score:
-	}	
+  {
+    "user_id": 123,
+    "prompt": "yakity yak",
+    "response": "blah blah blah",
+    "score": 42
+  }
 ]
 ```
 
 POST /text
 
 ```json
-	{
-		session_token:
-		prompt:
-       }
-
-	{
-		success:
-	}
+{
+  "session_token": "",
+  "prompt": ""
+}
 ```
 
 ```json
+{
+    "success": true
+}
+```
+
 POST /vote
-	{
-		session_token:
-		submission_id_winner:
-		submission_id_loser:
-	}
-```
 
-```
-	{
-		success:
-	}
+```json
+{
+  "session_token": "someguid",
+  "submission_id_winner": 123,
+  "submission_id_loser": 666
+}
 ```
 
 ```json
+{
+    "success": true
+}
+```
+
 GET /deathmatch
-	{
-		[
-			submission_id:
-			prompt:
-			response:
-		]
-
-	}
-```
 
 ```json
+[
+  {
+    "submission_id": 123,
+    "prompt": "Tell me of your homeworld Usul",
+    "response": "Beginnings are a delicate time blah blah blah"
+  }
+]
+
+```
+
 POST /session
-	{
-		email:
-	}
 
-	{
-		success:  (bool)
-		session_token: 
-	}
+```json
+{
+    "email": "somebody@somewhere.com"
+}
 ```
 
 ```json
-DELETE /session
-	{
-		session_token:
-	}
+{
+    "success":  false,
+    "session_token": "someguid"
+}
 ```
 
+DELETE /session
+
+```json
+{
+    "session_token": "someguid"
+}
+```
