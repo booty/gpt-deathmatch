@@ -6,7 +6,9 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+puts "Seeding..."
 
+DEFAULT_USER_EMAIL_ADDRESS = "imaginary.user@upstart.com"
 users = [
   %w{John Rose john.rose@upstart.com},
   %w{James Felton james.felton@upstart.com},
@@ -18,7 +20,7 @@ users = [
   %w{Casey Merkey casey.merkey@upstart.com},
   %w{Tony Santucci tony.santucci@upstart.com},
   %w{Alex Holmes alex.holmes@upstart.com},
-  %w{Mister CPU imaginary.user@upstart.com}
+  ["Mister", "CPU", DEFAULT_USER_EMAIL_ADDRESS]
 ]
 
 users.each do |u|
@@ -28,11 +30,6 @@ users.each do |u|
     email_address: u[2],
   )
 end
-
-default_user = User.find_by(
-  email_address: "imaginary.user@upstart.com"
-)
-
 
 submissions = [
   {
@@ -207,8 +204,13 @@ submissions = [
   },
 ]
 
-submissions.each do |s|
-  Submission.find_or_create_by(
+default_user = User.find_by(
+  email_address: DEFAULT_USER_EMAIL_ADDRESS
+)
+
+
+submissions.each_with_index do |s|
+  sub = Submission.find_or_create_by(
     user_id: default_user.id,
     gpt_prompt: s[:prompt],
     gpt_response: s[:response],
@@ -218,5 +220,33 @@ submissions.each do |s|
 end
 
 
+if Deathmatch.any?
+  puts "Skipping Deathmatch creation because we already have a bunch"
+else
+  all_users = User.all
+  all_submissions = Submission.all
+  Submission.all.sample(Submission.count / 2).each do |sub|
+    rand(1..6).times do |x|
+      dm = Deathmatch.create(
+        user: (all_users - [sub.user]).sample,
+        created_at: rand(1..30).days.ago,
+      )
+      votes = [1, -1].shuffle
+      DeathmatchVote.create(
+        submission: sub,
+        deathmatch: dm,
+        vote: votes.pop,
+      )
+      DeathmatchVote.create(
+        submission: (all_submissions - [sub]).sample,
+        deathmatch: dm,
+        vote: votes.pop,
+      )
+    end
+  end
+end
 
-puts "There are #{User.count} users and #{Submission.count} submissions. Happy GPT'ing!"
+models = [User, Submission, Session, Deathmatch, DeathmatchVote] # Can't use ApplicationRecord.descendants unless eager_load is treue
+models.each do |model|
+    puts "#{model.name}: #{model.count} records"
+end
