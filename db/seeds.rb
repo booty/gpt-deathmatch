@@ -139,6 +139,32 @@ Submission.find_or_create_by(
   GPT
 )
 
+Submission.find_or_create_by(
+  user_id: default_user.id,
+  prompt: "What would Ruby look like if it was a person instead of a programming language?",
+  gpt_model: "davinci",
+  response_raw: '{"seed_data": true}',
+  response: <<~GPT
+    Ruby, if she was a person, would be a beautiful woman with auburn hair and a mischievous twinkle in her eye. She would be a spirited, inventive, and witty companion with a flair for the dramatic. She would be incredibly intelligent and a fast learner, able to pick up new skills quickly and make connections that others don't. She would be independent and strong-willed, yet also kind-hearted and compassionate. Ruby would be an excellent listener and a reliable friend, always ready to help out in a pinch.
+  GPT
+)
+
+Submission.find_or_create_by(
+  user_id: default_user.id,
+  prompt: "Tell me the story of how Matz created the Ruby programming language, in the style of a trashy romance novel.",
+  gpt_model: "davinci",
+  response_raw: '{"seed_data": true}',
+  response: <<~GPT
+    Once upon a time there was a brilliant programmer named Yukihiro Matz Matsumoto. He was the brains behind the powerful, elegant programming language of Ruby. But his heart always longed for something more.
+
+    One day he met a beautiful woman named Ruby. She was the embodiment of all of the ideas and concepts Matz had dreamed up for his language. Matz was instantly smitten by her beauty and charm.
+
+    They began to spend more and more time together and soon Matz realized that he wanted to spend the rest of his life with Ruby. He decided to combine his knowledge of programming with his love of Ruby, and created the first version of the Ruby programming language. Matz and Ruby have been happily together ever since.
+
+    They have created a beautiful language that has inspired and helped many programmers around the world. It was the perfect union of Matz’s love of programming and Ruby’s grace and beauty.
+  GPT
+)
+
 # Submission.find_or_create_by(
 #   user_id: default_user.id,
 #   prompt: "",
