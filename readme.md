@@ -88,7 +88,12 @@
   {
     "score": 42,
     "submission": {
-      "user_id": 123,
+      "user": {
+        "first_name": "bob",
+        "last_name": "jones",
+        "email_address": "sadkjnsadkcjn@asdcas.com",
+        "user_id": 4567,
+      }
       "prompt": "yakity yak",
       "response": "blah blah blah",
     }
