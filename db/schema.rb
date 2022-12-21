@@ -38,8 +38,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_20_162409) do
 
   create_table "submissions", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.string "prompt", null: false
-    t.string "response", null: false
+    t.string "gpt_prompt", null: false
+    t.string "gpt_response", null: false
     t.string "gpt_model", null: false
     t.json "response_raw", null: false
     t.datetime "created_at", null: false

@@ -94,8 +94,8 @@
         "email_address": "sadkjnsadkcjn@asdcas.com",
         "user_id": 4567,
       }
-      "prompt": "yakity yak",
-      "response": "blah blah blah",
+      "gpt_prompt": "yakity yak",
+      "gpt_response": "blah blah blah",
     }
   }
 ]
@@ -107,7 +107,7 @@
 ```json5
 {
   "session_token": "someguid",
-  "prompt": "Write me a love story"
+  "gpt_prompt": "Write me a love story"
 }
 ```
 
@@ -153,13 +153,13 @@
 [
   {
     "submission_id": 123,
-    "prompt": "Tell me of your homeworld Usul",
-    "response": "Beginnings are a delicate time blah blah blah"
+    "gpt_prompt": "Tell me of your homeworld Usul",
+    "gpt_response": "Beginnings are a delicate time blah blah blah"
   },
   {
     "submission_id": 124,
-    "prompt": "How cool is Ruby?",
-    "response": "Super cool"
+    "gpt_prompt": "How cool is Ruby?",
+    "gpt_response": "Super cool"
   }
 ]
 
