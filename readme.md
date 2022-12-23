@@ -170,7 +170,7 @@
 <b>Request.</b>
 ```json5
 {
-    "email": "somebody@somewhere.com"
+    "email_address": "somebody@somewhere.com"
 }
 ```
 
