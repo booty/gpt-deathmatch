@@ -219,7 +219,6 @@ submissions.each_with_index do |s|
   )
 end
 
-
 if Deathmatch.any?
   puts "Skipping Deathmatch creation because we already have a bunch"
 else

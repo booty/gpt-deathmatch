@@ -20,8 +20,18 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+one:
+  gpt_model: "davinci"
+  gpt_prompt: "prompt 1"
+  gpt_response: "response 1"
+  response_raw: "zzz"
+  user_id: 1
 # column: value
 #
-two: {}
+two:
+  gpt_model: "davinci"
+  gpt_prompt: "prompt 2"
+  gpt_response: "response 2"
+  response_raw: "zzz"
+  user_id: 2
 # column: value

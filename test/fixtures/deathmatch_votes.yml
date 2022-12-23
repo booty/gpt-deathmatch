@@ -19,8 +19,14 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+one:
+  deathmatch_id: 1
+  vote: 1
+  submission_id: 1
 # column: value
 #
-two: {}
+two:
+  deathmatch_id: 1
+  vote: -1
+  submission_id: 2
 # column: value
