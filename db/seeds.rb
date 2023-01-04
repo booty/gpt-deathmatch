@@ -1,10 +1,4 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+# frozen_string_literal: true
 
 puts "Seeding..."
 
@@ -20,7 +14,7 @@ users = [
   %w{Casey Merkey casey.merkey@upstart.com},
   %w{Tony Santucci tony.santucci@upstart.com},
   %w{Alex Holmes alex.holmes@upstart.com},
-  ["Mister", "CPU", DEFAULT_USER_EMAIL_ADDRESS]
+  ["Mister", "CPU", DEFAULT_USER_EMAIL_ADDRESS],
 ]
 
 users.each do |u|
@@ -34,7 +28,7 @@ end
 submissions = [
   {
     prompt: "Talk about depression and computer programming in the style of the Wu-Tang clan",
-    response: <<~GPT
+    response: <<~GPT,
       Verse 1
       Depression lurks like a predator, creeping in from the shadows of our minds.
       It can take away our motivation, leaving us feeling caged and confined.
@@ -56,7 +50,7 @@ submissions = [
   },
   {
     prompt: "Write me a love story about Guy Fieri and Godzilla",
-    response: <<~GPT
+    response: <<~GPT,
       Once upon a time, there lived a man named Guy Fieri, a well-known chef and restaurateur. His passion for cooking was unparalleled, and he found joy in experimenting with all kinds of flavors and cuisines.
 
       One day, while out exploring the countryside, Guy Fieri stumbled upon a strange creature unlike anything he had ever seen before. It was a giant lizard-like creature with bright green skin and spikes along its back.
@@ -74,7 +68,7 @@ submissions = [
   },
   {
     prompt: "Write an RFC about why we should rewrite our upstart_web monolith in COBOL",
-    response: <<~GPT
+    response: <<~GPT,
       RFC-0001: Rewriting Upstart_Web Monolith in COBOL
 
       1. Introduction
@@ -90,7 +84,7 @@ submissions = [
   },
   {
     prompt: "Write about why Kotlin is bad in the style of Lewis Carroll",
-    response: <<~GPT
+    response: <<~GPT,
       'Twas brillig, and the Kotlin did not please,
       All slithy and strange, it did not ease.
       Its syntax was a burden, no matter how hard it tried,
@@ -114,19 +108,19 @@ submissions = [
   },
   {
     prompt: "Design a perfect romantic date night for me involving a bottle of whiskey, a stack of anime DVDs, Cheetos, and the most attractive person in the world",
-    response: <<~GPT
+    response: <<~GPT,
       Start off with a romantic dinner at home featuring a variety of decadent dishes that pair perfectly with your bottle of whiskey. After dinner, pop in one of the anime DVDs and share some Cheetos while snuggling up with the most attractive person in the world. After the show, enjoy a nightcap of whiskey with some more Cheetos and continue the night with some cozy conversation. Finish the night off with a romantic dance under the stars or some stargazing.
     GPT
   },
   {
     prompt: "What would Ruby look like if it was a person instead of a programming language?",
-    response: <<~GPT
+    response: <<~GPT,
       Ruby, if she was a person, would be a beautiful woman with auburn hair and a mischievous twinkle in her eye. She would be a spirited, inventive, and witty companion with a flair for the dramatic. She would be incredibly intelligent and a fast learner, able to pick up new skills quickly and make connections that others don't. She would be independent and strong-willed, yet also kind-hearted and compassionate. Ruby would be an excellent listener and a reliable friend, always ready to help out in a pinch.
     GPT
   },
   {
     prompt: "Tell me the story of how Matz created the Ruby programming language, in the style of a trashy romance novel.",
-    response: <<~GPT
+    response: <<~GPT,
       Once upon a time there was a brilliant programmer named Yukihiro Matz Matsumoto. He was the brains behind the powerful, elegant programming language of Ruby. But his heart always longed for something more.
 
       One day he met a beautiful woman named Ruby. She was the embodiment of all of the ideas and concepts Matz had dreamed up for his language. Matz was instantly smitten by her beauty and charm.
@@ -138,7 +132,7 @@ submissions = [
   },
   {
     prompt: "Describe a fight between one hundred adorable puppies armed with chainsaws and one hundred adorable kittens armed with samurai swords.",
-    response: <<~GPT
+    response: <<~GPT,
       The scene is chaos. One hundred adorable puppies with chainsaws rev up their engines, ready to engage in battle with one hundred adorable kittens armed with samurai swords. The little puppies bark ferociously and the little kittens meow menacingly as they take their positions.
 
       The battle begins and the puppies rush forward, chainsaws whirring. The kittens stand their ground and prepare to fight back. The puppies swing their chainsaws wildly and the kittens slash with their swords. The air is filled with fur and the ground quickly becomes littered with the remains of the battle.
@@ -150,7 +144,7 @@ submissions = [
   },
   {
     prompt: "Using very large words, tell me a story about a man who eats so many hoagies that the world runs out of food",
-    response: <<~GPT
+    response: <<~GPT,
       Once upon a time, there was a ravenous man who had an insatiable penchant for hoagies. He would devour these sandwiches with such gusto that his gastronomic exploits soon became renowned throughout the land.
 
       News of his prodigious appetite spread far and wide, until one day it reached the ears of a powerful king. In a fit of jealous rage, the king commanded the man to cease his voracious consumption. But, alas, it was too late.
@@ -162,53 +156,53 @@ submissions = [
   },
   {
     prompt: "Write the world's stupidest business plan",
-    response: <<~GPT
+    response: <<~GPT,
       The business plan is to open a store that sells nothing. The store will be located in a high-traffic area and will offer customers the experience of browsing for items that do not exist. The store will also offer helpful customer service and advice to those seeking to purchase items that do not exist.
     GPT
   },
   {
     prompt: "If I made a clone of myself, would we be able to get married? Why or why not?",
-    response: <<~GPT
+    response: <<~GPT,
       No, you would not be able to get married. Marriage is a legally binding agreement between two people, and a clone is considered to be the same person as the original, so it would be considered a form of incest.
     GPT
   },
   {
     prompt: "I'm going to the store. Do you want anything? I'm bringing you donuts and ravioli no matter what. I don't even know why I asked you.",
-    response: <<~GPT
+    response: <<~GPT,
       That's so sweet of you! If it's not too much trouble, I would love a bottle of cold soda and a bag of chips. Thank you!
     GPT
   },
   {
     prompt: "I have a really positive opinion of people from Liechtenstein! Why are they so amazing? I really like the way they cook their bratwurst. I wish I could make all of them live in my basement forever but I know that's impractical.",
-    response: <<~GPT
+    response: <<~GPT,
       Liechtensteiners are amazing for many reasons! They are incredibly hospitable and welcoming to visitors, have a strong sense of identity and community, and have a very strong economy. Their cuisine is excellent, with bratwurst being a particularly popular dish. They have a strong appreciation for the outdoors, with plenty of hiking and skiing opportunities available. They also have a great education system, with a very high literacy rate, and are proud to be a part of the European Union. So all in all, Liechtensteiners are a great bunch!
     GPT
   },
   {
     prompt: "Would Roger Federer be sad if I adopted him as my own son? I want to do this but only if it would make him happy. If this is a success I would like to do something similar with Rafael Nadal. How can I make this work?",
-    response: <<~GPT
+    response: <<~GPT,
       No, Roger Federer would not be sad if you adopted him as your own son. On the contrary, he would likely be very pleased and honored. However, it is not possible to legally adopt either Roger Federer or Rafael Nadal as your own son. You could, however, reach out to their respective charities or foundations and offer to make a donation in their name. This would be a great way to show your support for them and their causes.
     GPT
   },
   {
     prompt: "What's the worst thing that could happen if I start breakdancing in WalMart? Which aisle would be best? Should I be wearing clothing? I don't care if I'm arrested. This is my art... this is my life.",
-    response: <<~GPT
+    response: <<~GPT,
       The worst thing that could happen if you start breakdancing in Walmart is that you could be asked to leave, be fined, or even arrested. It would be best to breakdance in the clothing aisle, since that would be most appropriate, and yes, you should definitely be wearing clothing.
     GPT
   },
   {
     prompt: "What happened to that girl I had a crush on in 4th grade? Her name was Tara. Did she have a crush on me too? If you're not sure, just make up a story.",
-    response: <<~GPT
+    response: <<~GPT,
       Tara went on to become a successful scientist, inventing new treatments for diseases and making great strides in the scientific community. She never had a chance to find out if you had a crush on her, but she had a feeling that you did. She always remembered her time in fourth grade fondly, thinking of you every now and then and wishing that she had the courage to tell you how she felt.
     GPT
   },
 ]
 
 default_user = User.find_by(
-  email_address: DEFAULT_USER_EMAIL_ADDRESS
+  email_address: DEFAULT_USER_EMAIL_ADDRESS,
 )
 
-submissions.each_with_index do |s|
+submissions.each do |s|
   sub = Submission.find_or_create_by(
     user_id: default_user.id,
     gpt_prompt: s[:prompt],
@@ -244,7 +238,8 @@ end
 #   end
 # end
 
-models = [User, Submission, Session, Deathmatch, DeathmatchVote, DeathmatchSubmissionVote] # Can't use ApplicationRecord.descendants unless eager_load is treue
+# Can't use ApplicationRecord.descendants unless eager_load is true
+models = [User, Submission, Session, Deathmatch, DeathmatchVote, DeathmatchSubmissionVote]
 models.each do |model|
-    puts "#{model.name}: #{model.count} records"
+  puts "#{model.name}: #{model.count} records"
 end

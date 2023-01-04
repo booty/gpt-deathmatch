@@ -26,7 +26,7 @@ class SessionTest < ActiveSupport::TestCase
   test "creates a token if email is valid" do
     sesh = Session.find_or_create_by_email_address(
       email_address: User.first.email_address,
-      ip_address: "123.123.123.123"
+      ip_address: "123.123.123.123",
     )
 
     assert sesh
@@ -36,7 +36,7 @@ class SessionTest < ActiveSupport::TestCase
     assert_raises(Session::UserNotFound) do
       sesh = Session.find_or_create_by_email_address(
         email_address: "zzzzzz",
-        ip_address: "123.123.123.123"
+        ip_address: "123.123.123.123",
       )
     end
   end
@@ -45,7 +45,7 @@ class SessionTest < ActiveSupport::TestCase
     2.times do
       Session.find_or_create_by_email_address(
         email_address: User.first.email_address,
-        ip_address: "123.123.123.123"
+        ip_address: "123.123.123.123",
       )
     end
 
@@ -61,12 +61,12 @@ class SessionTest < ActiveSupport::TestCase
 
     sesh = Session.find_or_create_by_email_address(
       email_address: User.first.email_address,
-      ip_address: "123.123.123.123"
+      ip_address: "123.123.123.123",
     )
 
     assert_equal(
       0,
-      Session.where(user_id: User.last.id).count
+      Session.where(user_id: User.last.id).count,
     )
   end
 end

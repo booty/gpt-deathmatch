@@ -16,8 +16,5 @@
 class DeathmatchSubmission < ApplicationRecord
   belongs_to :deathmatch
   belongs_to :submission
-  has_many :deathmatch_submission_votes
-
-  validates :deathmatch, presence: true
-  validates :submission, presence: true
+  has_many :deathmatch_submission_votes, dependent: :destroy
 end

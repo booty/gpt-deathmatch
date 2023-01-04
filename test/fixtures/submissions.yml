@@ -20,6 +20,8 @@ puppy:
   gpt_prompt: "Tell me a story about puppies"
   gpt_response: "One day, there was a cute puppy and everybody loved him"
   response_raw: "zzz"
+  # notice how it's `user`, not `user_id`
+  # and we simply reference the user named `bob` in the users fixture file
   user: bob
 chocolate:
   gpt_model: "davinci"

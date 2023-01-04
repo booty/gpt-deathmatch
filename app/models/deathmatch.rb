@@ -13,6 +13,6 @@
 #
 class Deathmatch < ApplicationRecord
   belongs_to :user
-  has_many :deathmatch_votes
+  has_many :deathmatch_votes, dependent: :destroy
   has_many :deathmatches, through: :deathmatch_votes
 end
