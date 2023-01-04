@@ -13,10 +13,9 @@
 #  index_deathmatch_submissions_on_deathmatch_id  (deathmatch_id)
 #  index_deathmatch_submissions_on_submission_id  (submission_id)
 #
-require "test_helper"
-
-class DeathmatchSubmissionTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
-end
+godzilla_puppy_godzilla:
+  deathmatch: godzilla_puppy
+  submission: godzilla
+godzilla_puppy_puppy:
+  deathmatch: godzilla_puppy
+  submission: puppy
