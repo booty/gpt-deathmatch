@@ -208,7 +208,6 @@ default_user = User.find_by(
   email_address: DEFAULT_USER_EMAIL_ADDRESS
 )
 
-
 submissions.each_with_index do |s|
   sub = Submission.find_or_create_by(
     user_id: default_user.id,
@@ -219,33 +218,33 @@ submissions.each_with_index do |s|
   )
 end
 
-if Deathmatch.any?
-  puts "Skipping Deathmatch creation because we already have a bunch"
-else
-  all_users = User.all
-  all_submissions = Submission.all
-  Submission.all.sample(Submission.count / 2).each do |sub|
-    rand(1..6).times do |x|
-      dm = Deathmatch.create(
-        user: (all_users - [sub.user]).sample,
-        created_at: rand(1..30).days.ago,
-      )
-      votes = [1, -1].shuffle
-      DeathmatchVote.create(
-        submission: sub,
-        deathmatch: dm,
-        vote: votes.pop,
-      )
-      DeathmatchVote.create(
-        submission: (all_submissions - [sub]).sample,
-        deathmatch: dm,
-        vote: votes.pop,
-      )
-    end
-  end
-end
+# if Deathmatch.any?
+#   puts "Skipping Deathmatch creation because we already have a bunch"
+# else
+#   all_users = User.all
+#   all_submissions = Submission.all
+#   Submission.all.sample(Submission.count / 2).each do |sub|
+#     rand(1..6).times do |x|
+#       dm = Deathmatch.create(
+#         user: (all_users - [sub.user]).sample,
+#         created_at: rand(1..30).days.ago,
+#       )
+#       votes = [1, -1].shuffle
+#       DeathmatchVote.create(
+#         submission: sub,
+#         deathmatch: dm,
+#         vote: votes.pop,
+#       )
+#       DeathmatchVote.create(
+#         submission: (all_submissions - [sub]).sample,
+#         deathmatch: dm,
+#         vote: votes.pop,
+#       )
+#     end
+#   end
+# end
 
-models = [User, Submission, Session, Deathmatch, DeathmatchVote] # Can't use ApplicationRecord.descendants unless eager_load is treue
+models = [User, Submission, Session, Deathmatch, DeathmatchVote, DeathmatchSubmissionVote] # Can't use ApplicationRecord.descendants unless eager_load is treue
 models.each do |model|
     puts "#{model.name}: #{model.count} records"
 end

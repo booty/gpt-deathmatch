@@ -15,23 +15,21 @@
 #
 #  index_submissions_on_user_id  (user_id)
 #
-
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one:
+puppy:
   gpt_model: "davinci"
-  gpt_prompt: "prompt 1"
-  gpt_response: "response 1"
+  gpt_prompt: "Tell me a story about puppies"
+  gpt_response: "One day, there was a cute puppy and everybody loved him"
   response_raw: "zzz"
-  user_id: 1
-# column: value
-#
-two:
+  user: bob
+chocolate:
   gpt_model: "davinci"
-  gpt_prompt: "prompt 2"
-  gpt_response: "response 2"
+  gpt_prompt: "Write me a poem about chocolate"
+  gpt_response: "Choco choco chocolate, you're so neat / Choco choco chocolate I love to eat"
   response_raw: "zzz"
-  user_id: 2
-# column: value
+  user: sally
+gozilla:
+  gpt_model: "davinci"
+  gpt_prompt: "What does Godzilla eat for breakfast?"
+  gpt_response: "Anything he wants!"
+  response_raw: "zzz"
+  user: voldemort
