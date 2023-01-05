@@ -25,7 +25,7 @@ class DeathmatchSubmission < ApplicationRecord
 
   def deathmatch_doesnt_have_too_many_submissions
     # There should be at most, 1 other DeathmatchSubmission for this Deathmatch
-    other_submission_count = deathmatch.deathmatch_submissions.count
+    other_submission_count = self.deathmatch.deathmatch_submissions.count
 
     return if other_submission_count < Deathmatch::SUBMISSIONS_PER_DEATHMATCH
 

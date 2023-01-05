@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_05_075415) do
     t.integer "vote", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["deathmatch_submission_id"], name: "index_deathmatch_submission_votes_on_deathmatch_submission_id"
+    t.index "\"deathmatch_submission\"", name: "index_deathmatch_submission_votes_on_deathmatch_submission", unique: true
   end
 
   create_table "deathmatch_submissions", force: :cascade do |t|

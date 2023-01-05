@@ -10,7 +10,7 @@
 #
 # Indexes
 #
-#  index_deathmatch_submission_votes_on_deathmatch_submission_id  (deathmatch_submission_id)
+#  index_deathmatch_submission_votes_on_deathmatch_submission  ("deathmatch_submission") UNIQUE
 #
 class DeathmatchSubmissionVote < ApplicationRecord
   class DeathmatchAlreadyHasVotes < StandardError; end
@@ -19,12 +19,11 @@ class DeathmatchSubmissionVote < ApplicationRecord
   validate :no_more_than_two_votes_per_deathmatch
 
   def no_more_than_two_votes_per_deathmatch
-    other_votes_count = deathmatch.
-      deathmatch_votes.
-      where.not(id:).
+    other_votes_count = deathmatch_submission.
+      deathmatch_submission_votes.
       count
 
-    return if other_votes_count < Submission::SUBMISSIONS_PER_DEATHMATCH
+    return if other_votes_count < Deathmatch::SUBMISSIONS_PER_DEATHMATCH
 
     raise DeathmatchAlreadyHasVotes,
       "Deathmatch #{deathmatch.id} already has #{other_votes_count} votes"

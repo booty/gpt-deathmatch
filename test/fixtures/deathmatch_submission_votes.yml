@@ -10,11 +10,6 @@
 #
 # Indexes
 #
-#  index_deathmatch_submission_votes_on_deathmatch_submission_id  (deathmatch_submission_id)
+#  index_deathmatch_submission_votes_on_deathmatch_submission  ("deathmatch_submission") UNIQUE
 #
-godzilla_puppy_godzilla:
-  deathmatch_submission: godzilla_puppy_godzilla
-  vote: 1
-godzilla_puppy_puppy:
-  deathmatch_submission: godzilla_puppy_puppy
-  vote: -1
+

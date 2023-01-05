@@ -12,12 +12,6 @@ class UserFactory
   end
 end
 
-class DeathmatchFactory
-  def self.deathmatch(user: UserFactory.user)
-    Deathmatch.create!(user:)
-  end
-end
-
 class SubmissionFactory
   def self.submission(
     gpt_model: "davinci",
@@ -29,3 +23,25 @@ class SubmissionFactory
     Submission.create!(gpt_model:, gpt_prompt:, gpt_response:, response_raw:, user:)
   end
 end
+
+class DeathmatchFactory
+  def self.deathmatch(user: UserFactory.user)
+    Deathmatch.create!(user:)
+  end
+
+  def self.deathmatch_with_submissions
+    dm = deathmatch
+    2.times do
+      DeathmatchSubmission.create(deathmatch: dm, submission: SubmissionFactory.submission)
+    end
+    dm
+  end
+end
+
+# class DeathmatchSubmissionFactory
+#   def self.deathmatch_submission(
+
+#   )
+
+#   end
+# end
