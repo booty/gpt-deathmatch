@@ -13,19 +13,19 @@
 #
 #  index_users_on_email_address  (email_address)
 #
-bob:
-  email_address: "testuserbob@fakedomain.com"
-  first_name: "Bob"
-  last_name: "Bobbarino"
-sally:
-  email_address: "testusersally@fakedomain.com"
-  first_name: "Sally"
-  last_name: "Struthers"
-voldemort:
-  email_address: "voldemort@fakedomain.com"
-  first_name: "Tom"
-  last_name: "Riddle"
-fred_no_deathmatches:
-  email_address: "voldemort@fakedomain.com"
-  first_name: "Fred"
-  last_name: "Nodeathmatches"
+# bob:
+#   email_address: "testuserbob@fakedomain.com"
+#   first_name: "Bob"
+#   last_name: "Bobbarino"
+# sally:
+#   email_address: "testusersally@fakedomain.com"
+#   first_name: "Sally"
+#   last_name: "Struthers"
+# voldemort:
+#   email_address: "voldemort@fakedomain.com"
+#   first_name: "Tom"
+#   last_name: "Riddle"
+# fred_no_deathmatches:
+#   email_address: "voldemort@fakedomain.com"
+#   first_name: "Fred"
+#   last_name: "Nodeathmatches"

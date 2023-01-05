@@ -11,7 +11,7 @@
 #
 #  index_deathmatches_on_user_id  (user_id)
 #
-godzilla_puppy:
-  user: bob
-puppy_chocolate:
-  user: sally
+# godzilla_puppy:
+#   user: bob
+# puppy_chocolate:
+#   user: sally

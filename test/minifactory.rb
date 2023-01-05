@@ -37,11 +37,3 @@ class DeathmatchFactory
     dm
   end
 end
-
-# class DeathmatchSubmissionFactory
-#   def self.deathmatch_submission(
-
-#   )
-
-#   end
-# end

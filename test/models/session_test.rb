@@ -25,7 +25,7 @@ class SessionTest < ActiveSupport::TestCase
 
   test "creates a token if email is valid" do
     sesh = Session.find_or_create_by_email_address(
-      email_address: User.first.email_address,
+      email_address: UserFactory.user.email_address,
       ip_address: "123.123.123.123",
     )
 
@@ -42,9 +42,11 @@ class SessionTest < ActiveSupport::TestCase
   end
 
   test "doesn't create dupe tokens" do
+    user = UserFactory.user
+
     2.times do
       Session.find_or_create_by_email_address(
-        email_address: User.first.email_address,
+        email_address: user.email_address,
         ip_address: "123.123.123.123",
       )
     end
@@ -53,6 +55,8 @@ class SessionTest < ActiveSupport::TestCase
   end
 
   test "old tokens get purged" do
+    2.times { UserFactory.user }
+
     Session.create!(
       user_id: User.last.id,
       ip_address: "123.123.123.123",
