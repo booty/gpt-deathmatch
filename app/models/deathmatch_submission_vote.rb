@@ -13,7 +13,6 @@
 #  index_deathmatch_submission_votes_on_deathmatch_submission_id  (deathmatch_submission_id)
 #
 class DeathmatchSubmissionVote < ApplicationRecord
-  VOTES_PER_DEATHMATCH = 2
   class DeathmatchAlreadyHasVotes < StandardError; end
   belongs_to :deathmatch_submission
   validates :vote, inclusion: [-1, 1]
@@ -22,7 +21,7 @@ class DeathmatchSubmissionVote < ApplicationRecord
   def no_more_than_two_votes_per_deathmatch
     other_votes_count = deathmatch.
       deathmatch_votes.
-      where("id <> ?", id).
+      where.not(id:).
       count
 
     return if other_votes_count < Submission::SUBMISSIONS_PER_DEATHMATCH

@@ -1,4 +1,4 @@
-# GPT Deathmatch 
+# GPT Deathmatch
 
 
 ## Home page
@@ -65,7 +65,7 @@
         * check if email exists in User model
         * redirect to GET /
     * DELETE
-        * log out 
+        * log out
         * redirect to GET /
 
 
@@ -188,4 +188,18 @@
 {
     "session_token": "someguid"
 }
+```
+
+# SolarGraph Configuration
+
+[Based on this video, here](https://www.youtube.com/watch?v=mkLDPpDSWng). Very much a work in progress; I'm new to this.
+
+[Also see the Solargraph Rails docs](https://solargraph.org/guides/rails).
+
+```bash
+yard gems
+yard config --gem-install-yri
+solargraph download-core
+solargraph bundle
+curl https://gist.githubusercontent.com/castwide/28b349566a223dfb439a337aea29713e/raw/715473535f11cf3eeb9216d64d01feac2ea37ac0/rails.rb > config/definitions.rb
 ```

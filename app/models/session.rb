@@ -22,26 +22,27 @@ class Session < ApplicationRecord
   class UserNotFound < StandardError; end
 
   belongs_to :user
-
   before_validation :generate_guid
 
   def self.find_or_create_by_email_address(email_address:, ip_address:)
     purge_old_tokens # ULTRA KLUDGE!
 
-    user = User.find_by(email_address: email_address)
+    user = User.find_by(email_address:)
     raise UserNotFound unless user
 
-    self.find_or_create_by!(
-      user: user,
-      ip_address: ip_address,
+    find_or_create_by!(
+      user:,
+      ip_address:,
     )
   end
 
   private_class_method def self.purge_old_tokens
-    self.where("created_at < ?", Time.current - 30.days).delete_all
+    where("created_at < ?", 30.days.ago).delete_all
   end
 
   private
+
+  def foo; end
 
   def generate_guid
     self.guid ||= SecureRandom.uuid

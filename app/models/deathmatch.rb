@@ -12,7 +12,9 @@
 #  index_deathmatches_on_user_id  (user_id)
 #
 class Deathmatch < ApplicationRecord
+  SUBMISSIONS_PER_DEATHMATCH = 2
+
   belongs_to :user
-  has_many :deathmatch_votes, dependent: :destroy
-  has_many :deathmatches, through: :deathmatch_votes
+  has_many :deathmatch_submissions, dependent: :destroy
+  has_many :deathmatch_submission_votes, through: :deathmatch_submissions
 end

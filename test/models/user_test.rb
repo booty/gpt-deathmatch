@@ -16,7 +16,14 @@
 require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test ".user factory" do
+    UserFactory.user
+  end
+
+  test ".user_no_deathmatches factory" do
+    assert_equal(
+      0,
+      UserFactory.user_no_deathmatches.deathmatches.count,
+    )
+  end
 end

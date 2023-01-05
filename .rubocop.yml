@@ -8,13 +8,13 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
-    - db/schema.rb
-    - db/migrate/*
-    - lib/tasks/import.rake
-    - lib/tasks/dev.rake
-    - config/*
-    - config/initializers/*
-    - config/environments/*
+    # - db/schema.rb
+    # - db/migrate/*
+    # - lib/tasks/import.rake
+    # - lib/tasks/dev.rake
+    # - config/*
+    # - config/initializers/*
+    # - config/environments/*
   ExtraDetails: true
   NewCops: enable
 
@@ -59,12 +59,6 @@ Style/ClassAndModuleChildren:
   Description: 'Checks style of children classes and modules.'
   Enabled: true
   EnforcedStyle: nested
-  Exclude:
-    - app/controllers/api/v3/*
-    - app/models/chart/base.rb
-    - app/models/chart/globals.rb
-    - app/models/report/sensor_readings.rb
-    - app/models/chart/sensor_values.rb
 
 Metrics/ClassLength:
   Description: 'Avoid classes longer than 100 lines of code.'
@@ -108,14 +102,11 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   CountComments: true  # count full line comments?
   Max: 25
-  ExcludedMethods: []
   Exclude:
     - "spec/**/*"
     - "lib/tasks/*"
     - "Guardfile"
     - "Gemfile"
-    - app/models/chart/globals.rb
-    - app/models/chart/sensor_values.rb
 
 Metrics/CyclomaticComplexity:
   Description: >-
@@ -232,9 +223,9 @@ Style/LineEndConcatenation:
   Enabled: true
 
 Layout/LineLength:
-  Description: 'Limit lines to 80 characters.'
+  Description: 'Limit lines to 120 characters.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#80-character-limits'
-  Max: 100
+  Max: 120
 
 Metrics/MethodLength:
   Description: 'Avoid methods longer than 10 lines of code.'
@@ -438,7 +429,13 @@ Style/WordArray:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#percent-w'
   Enabled: false
 
+Style/SymbolArray:
+  Enabled: false
+
 # Layout
+
+Layout/ArgumentAlignment:
+  Enabled: false
 
 Layout/ConditionPosition:
   Description: >-
@@ -599,9 +596,6 @@ Style/HashTransformKeys:
   Enabled: true
 
 Style/HashTransformValues:
-  Enabled: true
-
-Style/SymbolArray:
   Enabled: true
 
 # Rails

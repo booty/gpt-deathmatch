@@ -16,6 +16,5 @@
 #  index_submissions_on_user_id  (user_id)
 #
 class Submission < ApplicationRecord
-  SUBMISSIONS_PER_DEATHMATCH = 2
   belongs_to :user
 end

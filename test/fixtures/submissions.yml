@@ -35,3 +35,9 @@ gozilla:
   gpt_response: "Anything he wants!"
   response_raw: "zzz"
   user: voldemort
+no_deathmatches:
+  gpt_model: "davinci"
+  gpt_prompt: "Lorem ipsum dolor"
+  gpt_response: "Fusce ut placerat orci nulla pellentesque dignissim"
+  response_raw: "zzz"
+  user: fred_no_deathmatches
