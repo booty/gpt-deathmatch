@@ -7,6 +7,7 @@ class CreateSubmissions < ActiveRecord::Migration[7.0]
       t.string :gpt_model, null: false
       t.json :response_raw, null: false
       t.timestamps
+      t.index :gpt_prompt, unique: true
     end
   end
 end

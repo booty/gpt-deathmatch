@@ -13,8 +13,15 @@
 #
 # Indexes
 #
-#  index_submissions_on_user_id  (user_id)
+#  index_submissions_on_gpt_prompt  (gpt_prompt) UNIQUE
+#  index_submissions_on_user_id     (user_id)
 #
 class Submission < ApplicationRecord
   belongs_to :user
+
+  before_create :fetch_gpt_response
+
+  def fetch_gpt_response
+
+  end
 end

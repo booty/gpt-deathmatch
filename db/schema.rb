@@ -54,6 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_05_075415) do
     t.json "response_raw", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["gpt_prompt"], name: "index_submissions_on_gpt_prompt", unique: true
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 

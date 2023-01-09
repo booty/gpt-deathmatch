@@ -239,7 +239,7 @@ end
 # end
 
 # Can't use ApplicationRecord.descendants unless eager_load is true
-models = [User, Submission, Session, Deathmatch, DeathmatchVote, DeathmatchSubmissionVote]
+models = [User, Submission, Session, Deathmatch, DeathmatchSubmission, DeathmatchSubmissionVote]
 models.each do |model|
   puts "#{model.name}: #{model.count} records"
 end

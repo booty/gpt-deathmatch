@@ -13,7 +13,8 @@
 #
 # Indexes
 #
-#  index_submissions_on_user_id  (user_id)
+#  index_submissions_on_gpt_prompt  (gpt_prompt) UNIQUE
+#  index_submissions_on_user_id     (user_id)
 #
 require "test_helper"
 

@@ -13,31 +13,7 @@
 #
 # Indexes
 #
-#  index_submissions_on_user_id  (user_id)
+#  index_submissions_on_gpt_prompt  (gpt_prompt) UNIQUE
+#  index_submissions_on_user_id     (user_id)
 #
-# puppy:
-#   gpt_model: "davinci"
-#   gpt_prompt: "Tell me a story about puppies"
-#   gpt_response: "One day, there was a cute puppy and everybody loved him"
-#   response_raw: "zzz"
-#   # notice how it's `user`, not `user_id`
-#   # and we simply reference the user named `bob` in the users fixture file
-#   user: bob
-# chocolate:
-#   gpt_model: "davinci"
-#   gpt_prompt: "Write me a poem about chocolate"
-#   gpt_response: "Choco choco chocolate, you're so neat / Choco choco chocolate I love to eat"
-#   response_raw: "zzz"
-#   user: sally
-# gozilla:
-#   gpt_model: "davinci"
-#   gpt_prompt: "What does Godzilla eat for breakfast?"
-#   gpt_response: "Anything he wants!"
-#   response_raw: "zzz"
-#   user: voldemort
-# no_deathmatches:
-#   gpt_model: "davinci"
-#   gpt_prompt: "Lorem ipsum dolor"
-#   gpt_response: "Fusce ut placerat orci nulla pellentesque dignissim"
-#   response_raw: "zzz"
 #   user: fred_no_deathmatches
