@@ -1,3 +1,6 @@
+# TODO: Probably split this up into separate files at some point.
+#       ...or, keep it so small that a single file feels feasible!
+
 class UserFactory
   def self.user(
     first_name: Faker::Name.first_name,
@@ -18,9 +21,16 @@ class SubmissionFactory
     gpt_prompt: Faker::Lorem.sentence(word_count: rand(3..6)),
     gpt_response: Faker::Lorem.sentence(word_count: rand(3..10)),
     response_raw: "blahblahblah",
-    user: UserFactory.user
+    user: UserFactory.user,
+    save: true
   )
-    Submission.create!(gpt_model:, gpt_prompt:, gpt_response:, response_raw:, user:)
+    args = { gpt_model:, gpt_prompt:, gpt_response:, response_raw:, user: }
+
+    if save
+      Submission.create!(args)
+    else
+      Submission.new(args)
+    end
   end
 end
 

@@ -22,4 +22,19 @@ class SubmissionTest < ActiveSupport::TestCase
   test "valid factory" do
     SubmissionFactory.submission
   end
+
+  test "fills in gpt_response before creating, but not after subsequent saves" do
+    submission = SubmissionFactory.submission(gpt_response: nil, save: false)
+    fake_response = Faker::Lorem.sentences.join(" ")
+
+    submission.stub(:fetch_gpt_response, fake_response) do
+      submission.save!
+    end
+
+    assert_equal(submission.gpt_response, fake_response)
+
+    submission.save!
+
+    assert_equal(submission.gpt_response, fake_response)
+  end
 end

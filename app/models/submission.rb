@@ -19,9 +19,21 @@
 class Submission < ApplicationRecord
   belongs_to :user
 
-  before_create :fetch_gpt_response
+  before_save :fetch_gpt_response_if_needed
+
+  private
+
+  def fetch_gpt_response_if_needed
+    self.gpt_response ||= fetch_gpt_response
+  end
 
   def fetch_gpt_response
-
+    OpenAI::Client.new.completions(
+      parameters: {
+        model: "text-davinci-001",
+        prompt: "Once upon a time",
+        max_tokens: 5,
+      },
+    )
   end
 end
