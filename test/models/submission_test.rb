@@ -6,7 +6,7 @@
 #  gpt_model    :string           not null
 #  gpt_prompt   :string           not null
 #  gpt_response :string           not null
-#  response_raw :json             not null
+#  response_raw :json
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  user_id      :integer          not null

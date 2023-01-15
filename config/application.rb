@@ -18,5 +18,11 @@ module GptDeathmatch
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # ref: https://guides.rubyonrails.org/configuring.html#custom-configuration
+
+    # s/b one of: Submission::GPT3_MODELS
+    config.x.openai.gpt3_model = ENV.fetch("OPENAI_GPT3_MODEL", "text-davinci-003")
+    config.x.openai.gpt3_max_tokens = ENV.fetch("OPENAI_GPT3_MAX_TOKENS", 500).to_i
   end
 end

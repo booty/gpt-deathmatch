@@ -17,7 +17,7 @@ end
 
 class SubmissionFactory
   def self.submission(
-    gpt_model: "davinci",
+    gpt_model: Submission::GPT3_MODELS.first,
     gpt_prompt: Faker::Lorem.sentence(word_count: rand(3..6)),
     gpt_response: Faker::Lorem.sentence(word_count: rand(3..10)),
     response_raw: "blahblahblah",

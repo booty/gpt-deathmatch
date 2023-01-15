@@ -208,7 +208,6 @@ submissions.each do |s|
     gpt_prompt: s[:prompt],
     gpt_response: s[:response],
     gpt_model: "davinci",
-    response_raw: '{"seed_data": true}',
   )
 end
 
