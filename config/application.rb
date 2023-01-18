@@ -24,5 +24,7 @@ module GptDeathmatch
     # s/b one of: Submission::GPT3_MODELS
     config.x.openai.gpt3_model = ENV.fetch("OPENAI_GPT3_MODEL", "text-davinci-003")
     config.x.openai.gpt3_max_tokens = ENV.fetch("OPENAI_GPT3_MAX_TOKENS", 500).to_i
+
+    config.autoload_paths << Rails.root.join("lib")
   end
 end

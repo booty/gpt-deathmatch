@@ -10,7 +10,7 @@
 #
 # Indexes
 #
-#  index_deathmatch_submission_votes_on_deathmatch_submission  ("deathmatch_submission") UNIQUE
+#  index_deathmatch_submission_votes_on_deathmatch_submission_id  (deathmatch_submission_id) UNIQUE
 #
 require "test_helper"
 

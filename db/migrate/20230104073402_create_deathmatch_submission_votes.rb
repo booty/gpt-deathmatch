@@ -4,7 +4,7 @@ class CreateDeathmatchSubmissionVotes < ActiveRecord::Migration[7.0]
       t.references :deathmatch_submission, index: false, null: false
       t.integer :vote, null: false
       t.timestamps
-      t.index :deathmatch_submission, unique: true
+      t.index :deathmatch_submission_id, unique: true
     end
   end
 end

@@ -10,9 +10,8 @@
 #
 # Indexes
 #
-#  index_deathmatch_submissions_on_deathmatch_id                    (deathmatch_id)
-#  index_deathmatch_submissions_on_deathmatch_id_and_submission_id  (deathmatch_id,submission_id) UNIQUE
-#  index_deathmatch_submissions_on_submission_id                    (submission_id)
+#  index_deathmatch_submissions_on_deathmatch_id  (deathmatch_id)
+#  index_deathmatch_submissions_on_submission_id  (submission_id)
 #
 class DeathmatchSubmission < ApplicationRecord
   class TooManySubmissions < StandardError; end
