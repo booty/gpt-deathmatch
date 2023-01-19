@@ -20,6 +20,7 @@ class Deathmatch < ApplicationRecord
 
   belongs_to :user
   has_many :deathmatch_submissions, dependent: :destroy
+  has_many :submissions, through: :deathmatch_submissions
 
   def self.for(user:)
     # does the user have an existing deathmatch upon which
@@ -57,17 +58,19 @@ class Deathmatch < ApplicationRecord
   # Returns 0-SUBMISSIONS_PER_DEATHMATCH submissions from other users
   # upon which this user has not voted
   def self.unvoted_submissions_for(user:)
-    Submission.find_by_sql(<<~SQL)
+    sql = <<~SQL
       select
         s.*
       from
         submissions s
       where
         s.user_id <> #{user.id}
-        and s.id not in (select submission_id from deathmatch_submissions where user_id = #{user.id}
+        and s.id not in (select submission_id from deathmatch_submissions where user_id = #{user.id})
       order by
         random()
       limit #{SUBMISSIONS_PER_DEATHMATCH}
     SQL
+
+    Submission.find_by_sql(sql)
   end
 end
