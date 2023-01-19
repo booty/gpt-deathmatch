@@ -10,20 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_05_075415) do
-  create_table "deathmatch_submission_votes", force: :cascade do |t|
-    t.integer "deathmatch_submission_id", null: false
-    t.integer "vote", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["deathmatch_submission_id"], name: "index_deathmatch_submission_votes_on_deathmatch_submission_id", unique: true
-  end
-
+ActiveRecord::Schema[7.0].define(version: 2022_12_20_162409) do
   create_table "deathmatch_submissions", force: :cascade do |t|
     t.integer "deathmatch_id", null: false
     t.integer "submission_id", null: false
+    t.integer "vote"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["deathmatch_id", "submission_id"], name: "index_deathmatch_submissions_on_deathmatch_id_and_submission_id", unique: true
     t.index ["deathmatch_id"], name: "index_deathmatch_submissions_on_deathmatch_id"
     t.index ["submission_id"], name: "index_deathmatch_submissions_on_submission_id"
   end

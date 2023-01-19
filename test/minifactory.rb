@@ -42,7 +42,10 @@ class DeathmatchFactory
   def self.deathmatch_with_submissions(user: UserFactory.user)
     dm = deathmatch(user:)
     Deathmatch::SUBMISSIONS_PER_DEATHMATCH.times do
-      DeathmatchSubmission.create!(deathmatch: dm, submission: SubmissionFactory.submission)
+      DeathmatchSubmission.create!(
+        deathmatch: dm,
+        submission: SubmissionFactory.submission,
+      )
     end
     dm
   end
@@ -50,8 +53,11 @@ class DeathmatchFactory
   def self.deathmatch_with_submissions_and_votes(user: UserFactory.user)
     dm = deathmatch(user:)
     Deathmatch::SUBMISSIONS_PER_DEATHMATCH.times do |x|
-      dms = DeathmatchSubmission.create!(deathmatch: dm, submission: SubmissionFactory.submission)
-      DeathmatchSubmissionVote.create!(deathmatch_submission: dms, vote: (x.zero? ? -1 : 1))
+      dms = DeathmatchSubmission.create!(
+        deathmatch: dm,
+        submission: SubmissionFactory.submission,
+        vote: (x.odd? ? -1 : 1),
+      )
     end
     dm
   end

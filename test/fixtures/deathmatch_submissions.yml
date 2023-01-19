@@ -3,6 +3,7 @@
 # Table name: deathmatch_submissions
 #
 #  id            :integer          not null, primary key
+#  vote          :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  deathmatch_id :integer          not null
@@ -10,6 +11,7 @@
 #
 # Indexes
 #
-#  index_deathmatch_submissions_on_deathmatch_id  (deathmatch_id)
-#  index_deathmatch_submissions_on_submission_id  (submission_id)
+#  index_deathmatch_submissions_on_deathmatch_id                    (deathmatch_id)
+#  index_deathmatch_submissions_on_deathmatch_id_and_submission_id  (deathmatch_id,submission_id) UNIQUE
+#  index_deathmatch_submissions_on_submission_id                    (submission_id)
 #

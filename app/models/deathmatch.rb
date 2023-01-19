@@ -20,7 +20,6 @@ class Deathmatch < ApplicationRecord
 
   belongs_to :user
   has_many :deathmatch_submissions, dependent: :destroy
-  has_many :deathmatch_submission_votes, through: :deathmatch_submissions
 
   def self.for(user:)
     # does the user have an existing deathmatch upon which
@@ -35,6 +34,8 @@ class Deathmatch < ApplicationRecord
     # if all else fails, raise an error
   end
 
+  # Returns the newest deathmatch for this user that has no votes
+  # Will return nil if none exist
   def self.current_deathmatch_for(user:)
     sql = <<~SQL
       select
@@ -43,11 +44,9 @@ class Deathmatch < ApplicationRecord
         deathmatches dm
           inner join deathmatch_submissions dms on
             dm.id = dms.deathmatch_id
-          left outer join deathmatch_submission_votes dmsv on
-            dms.id = dmsv.deathmatch_submission_id
       where
         dm.user_id = #{user.id}
-        and dmsv.id is null
+        and dms.vote is null
       order by
         dm.id desc
     SQL
@@ -55,26 +54,17 @@ class Deathmatch < ApplicationRecord
     find_by_sql(sql).first
   end
 
-  def self.prime_candidates(user:)
-    foo = Submission.find_by_sql(<<~SQL).first
-      with existing_votes_by_user as (
+  # Returns 0-SUBMISSIONS_PER_DEATHMATCH submissions from other users
+  # upon which this user has not voted
+  def self.unvoted_submissions_for(user:)
+    Submission.find_by_sql(<<~SQL)
       select
-        ds.submission_id
-      from
-        deathmatches d
-          inner join deathmatch_submissions ds on d.id = ds.deathmatch_id
-          inner join deathmatch_submission_votes dsv on ds.id = dsv.deathmatch_submission_id
-      where
-        d.user_id = #{user.id.to_i}
-      )
-
-      select
-        *
+        s.*
       from
         submissions s
       where
-        s.id not in (select submission_id from existing_votes_by_user)
-        and s.user_id <> #{user.id}
+        s.user_id <> #{user.id}
+        and s.id not in (select submission_id from deathmatch_submissions where user_id = #{user.id}
       order by
         random()
       limit #{SUBMISSIONS_PER_DEATHMATCH}

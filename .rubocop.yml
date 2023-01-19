@@ -645,3 +645,17 @@ Rails/TimeZone:
 Rails/Validation:
   Description: 'Use validates :attribute, hash of validations.'
   Enabled: false
+
+# this is bad and dumb, because if you have comments in your SQL
+# you will have breakage or unintended behavior
+# sql = <<~SQL.squish
+#  delete from
+#    users
+#  -- look, a comment
+#  where
+#    users.id = 123
+#  SQL
+# this will delete every user, not just 123 because everthing after the
+# comment will be ignored
+Rails/SquishedSQLHeredocs:
+  Enabled: false

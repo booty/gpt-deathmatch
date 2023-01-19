@@ -3,6 +3,7 @@
 # Table name: deathmatch_submissions
 #
 #  id            :integer          not null, primary key
+#  vote          :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  deathmatch_id :integer          not null
@@ -10,8 +11,9 @@
 #
 # Indexes
 #
-#  index_deathmatch_submissions_on_deathmatch_id  (deathmatch_id)
-#  index_deathmatch_submissions_on_submission_id  (submission_id)
+#  index_deathmatch_submissions_on_deathmatch_id                    (deathmatch_id)
+#  index_deathmatch_submissions_on_deathmatch_id_and_submission_id  (deathmatch_id,submission_id) UNIQUE
+#  index_deathmatch_submissions_on_submission_id                    (submission_id)
 #
 class DeathmatchSubmission < ApplicationRecord
   class TooManySubmissions < StandardError; end
@@ -19,10 +21,10 @@ class DeathmatchSubmission < ApplicationRecord
 
   belongs_to :deathmatch
   belongs_to :submission
-  has_many :deathmatch_submission_votes, dependent: :destroy
 
   validate :deathmatch_doesnt_have_too_many_submissions
   validate :deathmatch_is_not_a_duplicate_for_this_user
+  validates :vote, inclusion: { in: [-1, 1, nil] }
 
   def deathmatch_doesnt_have_too_many_submissions
     # There should be at most, 1 other DeathmatchSubmission for this Deathmatch
