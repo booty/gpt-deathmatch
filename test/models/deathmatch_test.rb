@@ -244,7 +244,6 @@ class DeathmatchTest < ActiveSupport::TestCase
       sub4 = SubmissionFactory.submission
       user1_dm2 = Deathmatch.find_or_create_for(user: user1)
 
-      # binding.pry
       assert(
         [sub3, sub4].same_elements_as?(user1_dm2.submissions),
         "user1 should get a new dm with sub3+sub4",
@@ -259,7 +258,7 @@ class DeathmatchTest < ActiveSupport::TestCase
       dm1 = DeathmatchFactory.deathmatch_with_submissions_and_votes(user:)
       other_sub = SubmissionFactory.submission
 
-      dm2 = Deathmatch.find_or_create_for(user:, debug: true)
+      dm2 = Deathmatch.find_or_create_for(user:)
       dm2_subs = dm2.submissions
 
       assert(

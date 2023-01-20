@@ -1,6 +1,10 @@
 # TODO: Probably split this up into separate files at some point.
 #       ...or, keep it so small that a single file feels feasible!
 
+# Why "roll our own" factories?
+# This is an experiment to see if we can replace FactoryBot with
+# something simple and tiny for this project.
+
 class UserFactory
   def self.user(
     first_name: Faker::Name.first_name,

@@ -20,18 +20,18 @@ class Deathmatch < ApplicationRecord
   has_many :deathmatch_submissions, dependent: :destroy
   has_many :submissions, through: :deathmatch_submissions
 
-  # finds or creates a deathmatch for the current user
-  def self.find_or_create_for(user:, debug: false)
-    # does the user have an existing deathmatch upon which
-    # they haven't voted? if so, return that instead of creating
-    # a new one
+  # Finds or creates a deathmatch for the current user
+  # Could return nil if no deathmatch is possible
+  def self.find_or_create_for(user:)
+    # does the user have an existing deathmatch upon which haven't voted?
+    # if so, return that instead of creating a new one
     current = current_deathmatch_for(user:)
     return current if current
 
     # find two submissions that:
     #   this user hasn't voted on yet
     #   this user didn't create
-    submission_id_pairs = unvoted_submission_ids_for(user:, debug:).
+    submission_id_pairs = unvoted_submission_ids_for(user:).
       combination(SUBMISSIONS_PER_DEATHMATCH).to_a
 
     # if none, find two submissions that this user didn't create
@@ -43,7 +43,6 @@ class Deathmatch < ApplicationRecord
       submission_id_pairs += find_unique_combinations(
         current_submission_id_pairs:,
         all_eligible_submission_ids: all_eligible_submission_ids_for(user:),
-        debug:,
       )
     end
 
@@ -51,26 +50,25 @@ class Deathmatch < ApplicationRecord
     return nil if submission_id_pairs.empty?
 
     # create a new deathmatch, with two randomly selected submissions
-    deathmatch = Deathmatch.create!(user:)
-    submission_id_pairs.sample.each do |submission_id|
-      DeathmatchSubmission.create!(
-        deathmatch:,
-        submission: Submission.find(submission_id), # yuck but w/e
-      )
+    ActiveRecord::Base.transaction do
+      deathmatch = Deathmatch.create!(user:)
+      submission_id_pairs.sample.each do |submission_id|
+        DeathmatchSubmission.create!(
+          deathmatch:,
+          submission: Submission.find(submission_id), # yuck but w/e
+        )
+      end
+      deathmatch
     end
-    deathmatch
   end
 
   # An array of submissions that can be considered for this user's next deathmatch
   # Currently, this is "all submissions from other users"
   def self.all_eligible_submission_ids_for(user:)
-    Submission.
-      where.
-      not(user:).
-      pluck(:id)
+    Submission.where.not(user:).pluck(:id)
   end
 
-  def self.find_unique_combinations(current_submission_id_pairs:, all_eligible_submission_ids:, debug: false)
+  def self.find_unique_combinations(current_submission_id_pairs:, all_eligible_submission_ids:)
     # create a set of sets representing all current pairs
     current_sets = current_submission_id_pairs.to_set(&:to_set)
 
@@ -79,15 +77,14 @@ class Deathmatch < ApplicationRecord
       combination(SUBMISSIONS_PER_DEATHMATCH).
       to_set(&:to_set)
 
-    (all_sets - current_sets).map { |x| x.to_a.sort }
+    (all_sets - current_sets).map(&:to_a)
   end
 
   # Returns the newest deathmatch for this user that has no votes
   # Will return nil if none exist.
   def self.current_deathmatch_for(user:)
     sql = <<~SQL
-      select
-        dm.*
+      select dm.*
       from
         deathmatches dm
           inner join deathmatch_submissions dms on
@@ -95,8 +92,7 @@ class Deathmatch < ApplicationRecord
       where
         dm.user_id = #{user.id}
         and dms.vote is null
-      order by
-        dm.id desc
+      order by dm.id desc
     SQL
 
     # There shouldn't be multiple results but if there are we'll take the
@@ -106,29 +102,24 @@ class Deathmatch < ApplicationRecord
 
   # Returns 0-SUBMISSIONS_PER_DEATHMATCH submissions from other users
   # upon which this user has not voted
-  def self.unvoted_submission_ids_for(user:, debug: false)
+  def self.unvoted_submission_ids_for(user:)
     sql = <<~SQL
-      select
-        s.*
-      from
-        submissions s
+      select s.id
+      from submissions s
       where
         s.user_id <> #{user.id}
         and s.id not in (
-          select
-            dms.submission_id
+          select dms.submission_id
           from
             deathmatches dm
               inner join deathmatch_submissions dms on dm.id = dms.deathmatch_id
           where
             dm.user_id = #{user.id}
         )
-      order by
-        random()
+      order by random()
       limit #{SUBMISSIONS_PER_DEATHMATCH}
     SQL
 
-    # TODO: optimize this, we just ids, not ARec objects
-    Submission.find_by_sql(sql).map(&:id)
+    Db.select_values(sql)
   end
 end

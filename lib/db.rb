@@ -9,4 +9,8 @@ class Db
   def self.select_all(sql)
     ActiveRecord::Base.connection.select_all(sql)
   end
+
+  def self.select_values(sql)
+    ActiveRecord::Base.connection.select_values(sql)
+  end
 end
