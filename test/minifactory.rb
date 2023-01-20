@@ -55,7 +55,7 @@ class DeathmatchFactory
     Deathmatch::SUBMISSIONS_PER_DEATHMATCH.times do |x|
       dms = DeathmatchSubmission.create!(
         deathmatch: dm,
-        submission: SubmissionFactory.submission(user:),
+        submission: SubmissionFactory.submission,
         vote: (x.odd? ? -1 : 1),
       )
     end

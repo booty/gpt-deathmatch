@@ -69,10 +69,10 @@ class DeathmatchTest < ActiveSupport::TestCase
       user2_sub1 = SubmissionFactory.submission
       user3_sub1 = SubmissionFactory.submission
 
-      result = Deathmatch.unvoted_submissions_for(user: user1)
+      result = Deathmatch.unvoted_submission_ids_for(user: user1)
 
-      assert_includes(result, user2_sub1, "Result should contain user2_sub1")
-      assert_includes(result, user3_sub1, "Result should contain user3_sub1")
+      assert_includes(result, user2_sub1.id, "Result should contain user2_sub1")
+      assert_includes(result, user3_sub1.id, "Result should contain user3_sub1")
       assert_equal(2, result.length, "Result should have 2 items")
     end
 
@@ -83,7 +83,7 @@ class DeathmatchTest < ActiveSupport::TestCase
       )
 
       assert_empty(
-        Deathmatch.unvoted_submissions_for(user: user1),
+        Deathmatch.unvoted_submission_ids_for(user: user1),
         "User already voted on everything",
       )
     end
@@ -96,8 +96,8 @@ class DeathmatchTest < ActiveSupport::TestCase
       other_persons_sub = SubmissionFactory.submission
 
       assert_equal(
-        [other_persons_sub],
-        Deathmatch.unvoted_submissions_for(user: user1),
+        [other_persons_sub.id],
+        Deathmatch.unvoted_submission_ids_for(user: user1),
       )
     end
 
@@ -105,9 +105,10 @@ class DeathmatchTest < ActiveSupport::TestCase
       user1 = UserFactory.user
       dm = DeathmatchFactory.deathmatch_with_submissions_and_votes
 
-      assert_equal(
-        Deathmatch.unvoted_submissions_for(user: user1).sort,
-        dm.submissions.sort,
+      assert(
+        dm.submissions.map(&:id).same_elements_as?(
+          Deathmatch.unvoted_submission_ids_for(user: user1),
+        ),
       )
     end
   end
@@ -234,9 +235,8 @@ class DeathmatchTest < ActiveSupport::TestCase
 
       user2_dm1 = Deathmatch.find_or_create_for(user: user2)
 
-      assert_equal(
-        [sub1, sub2],
-        user2_dm1.submissions.sort,
+      assert(
+        [sub1, sub2].same_elements_as?(user2_dm1.submissions),
         "user2 should get a dm with sub1+sub2",
       )
 
@@ -244,17 +244,50 @@ class DeathmatchTest < ActiveSupport::TestCase
       sub4 = SubmissionFactory.submission
       user1_dm2 = Deathmatch.find_or_create_for(user: user1)
 
-      assert_equal(
-        [sub3, sub4],
-        user1_dm2.submissions.sort,
+      # binding.pry
+      assert(
+        [sub3, sub4].same_elements_as?(user1_dm2.submissions),
         "user1 should get a new dm with sub3+sub4",
       )
     end
 
     test "returns a dm with one sub the user never voted on, plus one other" do
+      user = UserFactory.user
+
+      # After this, we'll have three submissions.
+      # User has voted on the first two.
+      dm1 = DeathmatchFactory.deathmatch_with_submissions_and_votes(user:)
+      other_sub = SubmissionFactory.submission
+
+      dm2 = Deathmatch.find_or_create_for(user:, debug: true)
+      dm2_subs = dm2.submissions
+
+      assert(
+        dm2.submissions.same_elements_as?([other_sub, dm1.submissions.first]) ||
+        dm2.submissions.same_elements_as?([other_sub, dm1.submissions.last]),
+      )
     end
 
     test "returns nothing if the user voted on everything" do
+      user = UserFactory.user
+
+      DeathmatchFactory.deathmatch_with_submissions_and_votes(user:)
+
+      assert_nil(Deathmatch.find_or_create_for(user:))
+    end
+
+    test "prefer submissions upon which the user has never voted" do
+      user = UserFactory.user
+
+      DeathmatchFactory.deathmatch_with_submissions_and_votes(user:)
+      sub3 = SubmissionFactory.submission
+      sub4 = SubmissionFactory.submission
+
+      assert(
+        [sub3, sub4].same_elements_as?(
+          Deathmatch.find_or_create_for(user:).submissions,
+        ),
+      )
     end
   end
 end

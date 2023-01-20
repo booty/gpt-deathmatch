@@ -12,10 +12,8 @@
 # Indexes
 #
 #  index_deathmatches_on_user_id  (user_id)
-#
-class Deathmatch < ApplicationRecord
-  class NoDeathmatchesForYou < StandardError; end
 
+class Deathmatch < ApplicationRecord
   SUBMISSIONS_PER_DEATHMATCH = 2
 
   belongs_to :user
@@ -33,28 +31,31 @@ class Deathmatch < ApplicationRecord
     # find two submissions that:
     #   this user hasn't voted on yet
     #   this user didn't create
-    submissions = unvoted_submissions_for(user:, debug:)
+    submission_id_pairs = unvoted_submission_ids_for(user:, debug:).
+      combination(SUBMISSIONS_PER_DEATHMATCH).to_a
 
     # if none, find two submissions that this user didn't create
     # TODO: find a combination that doesn't actually exist yet
-    if submissions.length < SUBMISSIONS_PER_DEATHMATCH
+    if submission_id_pairs.empty?
       current_submission_id_pairs = DeathmatchSubmission.
         deathmatch_submission_id_pairs_for(user:)
 
-      submissions += find_unique_combinations(
+      submission_id_pairs += find_unique_combinations(
         current_submission_id_pairs:,
         all_eligible_submission_ids: all_eligible_submission_ids_for(user:),
-      ).sample(SUBMISSIONS_PER_DEATHMATCH)
+        debug:,
+      )
     end
 
     # well, we tried. guess it's not possible!
-    return nil if submissions.length < SUBMISSIONS_PER_DEATHMATCH
+    return nil if submission_id_pairs.empty?
 
+    # create a new deathmatch, with two randomly selected submissions
     deathmatch = Deathmatch.create!(user:)
-    submissions.sample(SUBMISSIONS_PER_DEATHMATCH).each do |submission|
+    submission_id_pairs.sample.each do |submission_id|
       DeathmatchSubmission.create!(
         deathmatch:,
-        submission:,
+        submission: Submission.find(submission_id), # yuck but w/e
       )
     end
     deathmatch
@@ -69,7 +70,7 @@ class Deathmatch < ApplicationRecord
       pluck(:id)
   end
 
-  def self.find_unique_combinations(current_submission_id_pairs:, all_eligible_submission_ids:)
+  def self.find_unique_combinations(current_submission_id_pairs:, all_eligible_submission_ids:, debug: false)
     # create a set of sets representing all current pairs
     current_sets = current_submission_id_pairs.to_set(&:to_set)
 
@@ -105,7 +106,7 @@ class Deathmatch < ApplicationRecord
 
   # Returns 0-SUBMISSIONS_PER_DEATHMATCH submissions from other users
   # upon which this user has not voted
-  def self.unvoted_submissions_for(user:, debug: false)
+  def self.unvoted_submission_ids_for(user:, debug: false)
     sql = <<~SQL
       select
         s.*
@@ -127,6 +128,7 @@ class Deathmatch < ApplicationRecord
       limit #{SUBMISSIONS_PER_DEATHMATCH}
     SQL
 
-    Submission.find_by_sql(sql)
+    # TODO: optimize this, we just ids, not ARec objects
+    Submission.find_by_sql(sql).map(&:id)
   end
 end
