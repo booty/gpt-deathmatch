@@ -117,7 +117,7 @@ class DeathmatchTest < ActiveSupport::TestCase
       assert_empty(
         Deathmatch.find_unique_combinations(
           current_submission_id_pairs: [],
-          all_submission_ids: [],
+          all_eligible_submission_ids: [],
         ),
       )
     end
@@ -126,7 +126,7 @@ class DeathmatchTest < ActiveSupport::TestCase
       assert_empty(
         Deathmatch.find_unique_combinations(
           current_submission_id_pairs: [[2, 1]],
-          all_submission_ids: [1, 2],
+          all_eligible_submission_ids: [1, 2],
         ),
       )
     end
@@ -135,7 +135,7 @@ class DeathmatchTest < ActiveSupport::TestCase
       assert_empty(
         Deathmatch.find_unique_combinations(
           current_submission_id_pairs: [[2, 1], [4, 3], [1, 4], [2, 3], [4, 2], [1, 3]],
-          all_submission_ids: [4, 2, 1, 3],
+          all_eligible_submission_ids: [4, 2, 1, 3],
         ),
       )
     end
@@ -144,7 +144,7 @@ class DeathmatchTest < ActiveSupport::TestCase
       assert_empty(
         Deathmatch.find_unique_combinations(
           current_submission_id_pairs: [[1, 2], [2, 3], [3, 1]],
-          all_submission_ids: [1, 2, 3],
+          all_eligible_submission_ids: [1, 2, 3],
         ),
       )
     end
@@ -153,7 +153,7 @@ class DeathmatchTest < ActiveSupport::TestCase
       assert_equal(
         Deathmatch.find_unique_combinations(
           current_submission_id_pairs: [],
-          all_submission_ids: [1, 2],
+          all_eligible_submission_ids: [1, 2],
         ).to_set,
         Set.new([[1, 2]]),
       )
@@ -163,7 +163,7 @@ class DeathmatchTest < ActiveSupport::TestCase
       assert_equal(
         Deathmatch.find_unique_combinations(
           current_submission_id_pairs: [],
-          all_submission_ids: [1, 2, 3],
+          all_eligible_submission_ids: [1, 2, 3],
         ).to_set,
         Set.new([[1, 2], [2, 3], [1, 3]]),
       )
@@ -173,24 +173,22 @@ class DeathmatchTest < ActiveSupport::TestCase
       assert_equal(
         Deathmatch.find_unique_combinations(
           current_submission_id_pairs: [[2, 3]],
-          all_submission_ids: [1, 2, 3],
+          all_eligible_submission_ids: [1, 2, 3],
         ).to_set,
         Set.new([[1, 2], [1, 3]]),
       )
     end
   end
 
-  class ForTest < DeathmatchTest
+  class FindOrCreateForTest < DeathmatchTest
     test "returns nothing when there's nothing" do
-      assert_nil(Deathmatch.for(user: UserFactory.user))
+      assert_nil(Deathmatch.find_or_create_for(user: UserFactory.user))
     end
 
     test "returns nothing when there's nothing except this user's subs" do
       user = UserFactory.user
-      # binding.pry
       2.times { SubmissionFactory.submission(user:) }
-      # binding.pry
-      assert_nil(Deathmatch.for(user:))
+      assert_nil(Deathmatch.find_or_create_for(user:))
     end
 
     test "idempotently returns a dm with correct subs" do
@@ -199,13 +197,13 @@ class DeathmatchTest < ActiveSupport::TestCase
       sub1 = SubmissionFactory.submission
       sub2 = SubmissionFactory.submission
 
-      dm1 = Deathmatch.for(user:)
-      dm2 = Deathmatch.for(user:)
+      dm1 = Deathmatch.find_or_create_for(user:)
+      dm2 = Deathmatch.find_or_create_for(user:)
 
       assert_equal(
         dm1,
         dm2,
-        "shouldn't create a new deathmatch",
+        "shouldn't create a new deathmatch; user hasn't voted on the first one yet",
       )
       assert_equal(
         [sub1, sub2],
@@ -225,18 +223,16 @@ class DeathmatchTest < ActiveSupport::TestCase
       sub1 = SubmissionFactory.submission
       sub2 = SubmissionFactory.submission
 
-      # binding.pry
-      user1_dm1 = Deathmatch.for(user: user1)
-      # binding.pry
+      user1_dm1 = Deathmatch.find_or_create_for(user: user1)
       user1_dm1.deathmatch_submissions.first.update!({ vote: 1 })
       user1_dm1.deathmatch_submissions.last.update!({ vote: -1 })
 
       assert_nil(
-        Deathmatch.for(user: user1),
+        Deathmatch.find_or_create_for(user: user1),
         "nothing for user1 to vote on; already voted",
       )
 
-      user2_dm1 = Deathmatch.for(user: user2)
+      user2_dm1 = Deathmatch.find_or_create_for(user: user2)
 
       assert_equal(
         [sub1, sub2],
@@ -246,7 +242,7 @@ class DeathmatchTest < ActiveSupport::TestCase
 
       sub3 = SubmissionFactory.submission
       sub4 = SubmissionFactory.submission
-      user1_dm2 = Deathmatch.for(user: user1)
+      user1_dm2 = Deathmatch.find_or_create_for(user: user1)
 
       assert_equal(
         [sub3, sub4],

@@ -41,12 +41,16 @@ class DeathmatchSubmission < ApplicationRecord
     this_dm_pair << submission.id
     return unless this_dm_pair.length == 2
 
-    other_dm_pairs_for_user = deathmatch.
-      user.
-      reload.
-      deathmatches.
-      map { |dm| dm.deathmatch_submissions.pluck(:submission_id).to_set }
+    other_dm_pairs_for_user = self.class.deathmatch_submission_id_pairs_for(
+      user: deathmatch.user.reload,
+    )
 
     raise DuplicateDeathmatch if other_dm_pairs_for_user.include?(this_dm_pair)
+  end
+
+  def self.deathmatch_submission_id_pairs_for(user:)
+    user.
+      deathmatches.
+      map { |dm| dm.deathmatch_submissions.pluck(:submission_id).to_set }
   end
 end
