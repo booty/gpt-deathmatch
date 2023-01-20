@@ -105,10 +105,9 @@ class DeathmatchTest < ActiveSupport::TestCase
       user1 = UserFactory.user
       dm = DeathmatchFactory.deathmatch_with_submissions_and_votes
 
-      assert(
-        dm.submissions.map(&:id).same_elements_as?(
-          Deathmatch.unvoted_submission_ids_for(user: user1),
-        ),
+      assert_equal_unordered(
+        dm.submissions.map(&:id),
+        Deathmatch.unvoted_submission_ids_for(user: user1),
       )
     end
   end
@@ -189,6 +188,7 @@ class DeathmatchTest < ActiveSupport::TestCase
     test "returns nothing when there's nothing except this user's subs" do
       user = UserFactory.user
       2.times { SubmissionFactory.submission(user:) }
+
       assert_nil(Deathmatch.find_or_create_for(user:))
     end
 
@@ -235,8 +235,9 @@ class DeathmatchTest < ActiveSupport::TestCase
 
       user2_dm1 = Deathmatch.find_or_create_for(user: user2)
 
-      assert(
-        [sub1, sub2].same_elements_as?(user2_dm1.submissions),
+      assert_equal_unordered(
+        [sub1, sub2],
+        user2_dm1.submissions,
         "user2 should get a dm with sub1+sub2",
       )
 
@@ -244,8 +245,9 @@ class DeathmatchTest < ActiveSupport::TestCase
       sub4 = SubmissionFactory.submission
       user1_dm2 = Deathmatch.find_or_create_for(user: user1)
 
-      assert(
-        [sub3, sub4].same_elements_as?(user1_dm2.submissions),
+      assert_equal_unordered(
+        [sub3, sub4],
+        user1_dm2.submissions,
         "user1 should get a new dm with sub3+sub4",
       )
     end
@@ -282,10 +284,9 @@ class DeathmatchTest < ActiveSupport::TestCase
       sub3 = SubmissionFactory.submission
       sub4 = SubmissionFactory.submission
 
-      assert(
-        [sub3, sub4].same_elements_as?(
-          Deathmatch.find_or_create_for(user:).submissions,
-        ),
+      assert_equal_unordered(
+        [sub3, sub4],
+        Deathmatch.find_or_create_for(user:).submissions,
       )
     end
   end
