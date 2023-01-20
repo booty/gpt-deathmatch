@@ -61,7 +61,7 @@ class DeathmatchTest < ActiveSupport::TestCase
     end
   end
 
-  class UnvotedSubmissionsFor < DeathmatchTest
+  class UnvotedSubmissionsForTest < DeathmatchTest
     test "doesn't return user's own submissions" do
       user1 = UserFactory.user
       user1_sub1 = SubmissionFactory.submission(user: user1)
@@ -109,6 +109,156 @@ class DeathmatchTest < ActiveSupport::TestCase
         Deathmatch.unvoted_submissions_for(user: user1).sort,
         dm.submissions.sort,
       )
+    end
+  end
+
+  class FindUniqueCombinationsTest < DeathmatchTest
+    test "returns nil when there's nothing" do
+      assert_empty(
+        Deathmatch.find_unique_combinations(
+          current_submission_id_pairs: [],
+          all_submission_ids: [],
+        ),
+      )
+    end
+
+    test "returns nil when there's one thing and it ain't unique" do
+      assert_empty(
+        Deathmatch.find_unique_combinations(
+          current_submission_id_pairs: [[2, 1]],
+          all_submission_ids: [1, 2],
+        ),
+      )
+    end
+
+    test "returns nil when there's several but they're not unique" do
+      assert_empty(
+        Deathmatch.find_unique_combinations(
+          current_submission_id_pairs: [[2, 1], [4, 3], [1, 4], [2, 3], [4, 2], [1, 3]],
+          all_submission_ids: [4, 2, 1, 3],
+        ),
+      )
+    end
+
+    test "returns nil when there's 3 but two aren't unique" do
+      assert_empty(
+        Deathmatch.find_unique_combinations(
+          current_submission_id_pairs: [[1, 2], [2, 3], [3, 1]],
+          all_submission_ids: [1, 2, 3],
+        ),
+      )
+    end
+
+    test "returns the only possible pair" do
+      assert_equal(
+        Deathmatch.find_unique_combinations(
+          current_submission_id_pairs: [],
+          all_submission_ids: [1, 2],
+        ).to_set,
+        Set.new([[1, 2]]),
+      )
+    end
+
+    test "returns all possible pairs when I have none" do
+      assert_equal(
+        Deathmatch.find_unique_combinations(
+          current_submission_id_pairs: [],
+          all_submission_ids: [1, 2, 3],
+        ).to_set,
+        Set.new([[1, 2], [2, 3], [1, 3]]),
+      )
+    end
+
+    test "returns all possible pairs when I have some" do
+      assert_equal(
+        Deathmatch.find_unique_combinations(
+          current_submission_id_pairs: [[2, 3]],
+          all_submission_ids: [1, 2, 3],
+        ).to_set,
+        Set.new([[1, 2], [1, 3]]),
+      )
+    end
+  end
+
+  class ForTest < DeathmatchTest
+    test "returns nothing when there's nothing" do
+      assert_nil(Deathmatch.for(user: UserFactory.user))
+    end
+
+    test "returns nothing when there's nothing except this user's subs" do
+      user = UserFactory.user
+      # binding.pry
+      2.times { SubmissionFactory.submission(user:) }
+      # binding.pry
+      assert_nil(Deathmatch.for(user:))
+    end
+
+    test "idempotently returns a dm with correct subs" do
+      user = UserFactory.user
+      2.times { SubmissionFactory.submission(user:) }
+      sub1 = SubmissionFactory.submission
+      sub2 = SubmissionFactory.submission
+
+      dm1 = Deathmatch.for(user:)
+      dm2 = Deathmatch.for(user:)
+
+      assert_equal(
+        dm1,
+        dm2,
+        "shouldn't create a new deathmatch",
+      )
+      assert_equal(
+        [sub1, sub2],
+        dm1.submissions.sort,
+        "returns deathmatch with correct subs the first time",
+      )
+      assert_equal(
+        [sub1, sub2],
+        dm2.submissions.sort,
+        "returns deathmatch with correct subs the second time",
+      )
+    end
+
+    test "returns a new dm after user voted on the first one" do
+      user1 = UserFactory.user
+      user2 = UserFactory.user
+      sub1 = SubmissionFactory.submission
+      sub2 = SubmissionFactory.submission
+
+      # binding.pry
+      user1_dm1 = Deathmatch.for(user: user1)
+      # binding.pry
+      user1_dm1.deathmatch_submissions.first.update!({ vote: 1 })
+      user1_dm1.deathmatch_submissions.last.update!({ vote: -1 })
+
+      assert_nil(
+        Deathmatch.for(user: user1),
+        "nothing for user1 to vote on; already voted",
+      )
+
+      user2_dm1 = Deathmatch.for(user: user2)
+
+      assert_equal(
+        [sub1, sub2],
+        user2_dm1.submissions.sort,
+        "user2 should get a dm with sub1+sub2",
+      )
+
+      sub3 = SubmissionFactory.submission
+      sub4 = SubmissionFactory.submission
+      user1_dm2 = Deathmatch.for(user: user1)
+
+      assert_equal(
+        [sub3, sub4],
+        user1_dm2.submissions.sort,
+        "user1 should get a new dm with sub3+sub4",
+      )
+    end
+
+    test "returns a dm with one sub the user never voted on, plus one other" do
+    end
+
+    test "returns nothing if the user voted on everything" do
     end
   end
 end

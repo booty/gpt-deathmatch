@@ -22,8 +22,8 @@ class DeathmatchSubmission < ApplicationRecord
   belongs_to :deathmatch
   belongs_to :submission
 
-  validate :deathmatch_doesnt_have_too_many_submissions
-  validate :deathmatch_is_not_a_duplicate_for_this_user
+  validate :deathmatch_doesnt_have_too_many_submissions, on: :create
+  validate :deathmatch_is_not_a_duplicate_for_this_user, on: :create
   validates :vote, inclusion: { in: [-1, 1, nil] }
 
   def deathmatch_doesnt_have_too_many_submissions
